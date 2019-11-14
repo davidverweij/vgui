@@ -15,7 +15,46 @@ var notesList = $('ul#notes');
 
 var noteContent = '';
 
-var fuzzyLib = FuzzySet(["if","this","then","that","at","o'clock","hour","time"]);
+let sensors = [
+    "Temperature" ,
+    "Proximity" ,
+    "Accelerometer",
+    "IR" , "Infrared" ,
+    "Pressure" ,
+    "Light" ,
+    "Ultrasonic" ,
+    "Smoke", "Gas" , "Alcohol" ,
+    "Touch" ,
+    "Color" ,
+    "Humidity" ,
+    "Tilt" ,
+    "Flow" , "Level",
+    "weather", "stock", "cryptocurrency", "football"
+
+];
+let actors = [
+  'Gmail',
+  'Facebook',
+  'Telegram',
+  'Instagram',
+  'Pinterest',
+  'twitter',
+];
+let mapping = [
+  'mapping',
+  'notification',
+  'range',
+  'higher',
+  'lower',
+  'less',
+  'below',
+  'compare',
+  'threshold',
+];
+
+let citiesInEngland = ['Avon', 'Bedfordshire', 'Berkshire', 'Buckinghamshire', 'Cambridgeshire', 'Cheshire', 'Cleveland', 'Cornwall', 'Cumbria', 'Derbyshire', 'Devon', 'Dorset', 'Durham', 'East Sussex', 'Essex', 'Gloucestershire', 'Hampshire', 'Herefordshire', 'Hertfordshire', 'Isle of Wight', 'Kent', 'Lancashire', 'Leicestershire', 'Lincolnshire', 'London', 'Merseyside', 'Middlesex', 'Norfolk', 'Northamptonshire', 'Northumberland', 'North Humberside', 'North Yorkshire', 'Nottinghamshire', 'Oxfordshire', 'Rutland', 'Shropshire', 'Somerset', 'South Humberside', 'South Yorkshire', 'Staffordshire', 'Suffolk', 'Surrey', 'Tyne and Wear', 'Warwickshire', 'West Midlands', 'West Sussex', 'West Yorkshire', 'Wiltshire', 'Worcestershire'];
+
+var fuzzyLib = FuzzySet(citiesInEngland.concat(mapping, actors, sensors));
 
 // Get all notes from previous sessions and display them.
 if (!localStorage.getItem('spokenwords')) localStorage.setItem('spokenwords', ' ');
@@ -196,8 +235,9 @@ function renderNotes(content){
         }
       };
       document.getElementById('notes').appendChild(button);
-      let fuzzyResult = fuzzyLib.get(word);
+      let fuzzyResult = fuzzyLib.get(word, null ,.50);
       if (fuzzyResult != null){
+        console.log(fuzzyResult);
         fuzzyResult.forEach(function(close){
           let suggestion = document.createElement('button');
           suggestion.innerHTML = close[1];
