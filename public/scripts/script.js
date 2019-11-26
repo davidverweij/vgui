@@ -8,7 +8,6 @@ catch(e) {
   $('.app').hide();
 }
 
-
 var noteTextarea = $('#note-textarea');
 var instructions = $('#recording-instructions');
 var notesList = $('ul#notes');
@@ -66,10 +65,39 @@ renderNotes(localStorage.getItem('spokenwords'));
 Voice Recognition
 ------------------------------*/
 
+document.body.onkeyup = function(e){
+    if(e.keyCode == 32 && document.activeElement.id != "note-textarea"){        //space bar - if only pressed outside of the text field
+      recognition_running = false;
+      recognition.stop();
+      instructions.text('Voice recognition paused.');
+
+    }
+}
+document.body.onkeydown = function(e){
+    if(e.keyCode == 32 && document.activeElement.id != "note-textarea"){        //space bar - if only pressed outside of the text field
+      if (!recognition_running) {
+        recognition.start();
+        recognition_running = true;
+      }
+    }
+}
+
+var siriWave = new SiriWave({
+  container: document.getElementById('siri-container'),
+  width: 700,
+  height: 200,
+  speed:0.01,
+  amplitude:0.1,
+  color: "#000",
+  autostart:true,
+});
+
+var recognition_running = false;
+
 // If false, the recording will stop after a few seconds of silence.
 // When true, the silence period is longer (about 15 seconds),
 // allowing us to keep recording even when the user pauses.
-recognition.continuous = true;
+recognition.continuous = false;
 
 // This block is called every time the Speech APi captures a line.
 recognition.onresult = function(event) {
@@ -94,10 +122,12 @@ recognition.onresult = function(event) {
 };
 
 recognition.onstart = function() {
+  recognition_running = true;
   instructions.text('Voice recognition activated. Try speaking into the microphone.');
 }
 
 recognition.onspeechend = function() {
+  recognition_running = false;
   instructions.text('You were quiet for a while so voice recognition turned itself off.');
 }
 
@@ -105,6 +135,12 @@ recognition.onerror = function(event) {
   if(event.error == 'no-speech') {
     instructions.text('No speech was detected. Try again.');
   };
+}
+recognition.onsoundstart = function() {
+  siriWave.setAmplitude(1);
+}
+recognition.onsoundend = function() {
+  siriWave.setAmplitude(0);
 }
 
 

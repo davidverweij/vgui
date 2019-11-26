@@ -21,7 +21,7 @@ button:focus {
 }
 
 .container {
-    max-width: 700px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 100px 50px;
     text-align: left;
@@ -53,8 +53,30 @@ button:focus {
     margin: 40px auto;
 }
 
+#spacebar {
+  padding:20px;
+text-align: center;
+cursor: pointer;
+outline: none;
+color: #000;
+background-color: lightgrey;
+border: none;
+border-radius: 15px;
+box-shadow: 0 5px #999;
+}
+
+#spacebar:active {
+  box-shadow: 0 3px #999;
+    transform: translateY(2px);
+
+}
+
 #note-textarea {
     margin: 20px 0;
+    background-color:lightgrey;
+}
+#note-textarea:focus {
+  background-color: white;
 }
 
 #recording-instructions {
